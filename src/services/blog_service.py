@@ -96,7 +96,8 @@ class BlogService:
                     "page": page,
                     "per_page": per_page,
                     "total": len(blogs),
-                    "blogs": list_blogs
+                    "total_pages": len(blogs) // per_page,
+                    "data": list_blogs
                 },
                 status_code=200
             )
