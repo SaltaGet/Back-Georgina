@@ -69,6 +69,9 @@ class BlogService:
             )
             
             blogs: List[Blog] = (await self.session.execute(sttmt)).scalars().all()
+
+            sttmt_total = select(Blog).count()
+            total_blogs = (await self.session.exec(sttmt_total)).first()
             
             scheme = request.scope.get("scheme") 
             host = request.headers.get("host")   
@@ -96,7 +99,7 @@ class BlogService:
                     "page": page,
                     "per_page": per_page,
                     "total": len(blogs),
-                    "total_pages": len(blogs) // per_page,
+                    "total_pages": (len(total_blogs) // per_page) + 1,
                     "data": list_blogs
                 },
                 status_code=200
