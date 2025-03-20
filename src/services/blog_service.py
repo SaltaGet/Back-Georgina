@@ -6,7 +6,7 @@ from typing import List
 import zlib
 from fastapi import HTTPException, Request, status, UploadFile
 from src.models.blog_model import Blog
-from sqlmodel import select
+from sqlmodel import func, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import joinedload
@@ -68,9 +68,9 @@ class BlogService:
                 .offset(offset)
             )
             
-            blogs: List[Blog] = (await self.session.execute(sttmt)).scalars().all()
+            blogs: List[Blog] = (await self.session.exec(sttmt)).all()
 
-            sttmt_total = select(Blog).count()
+            sttmt_total = select(func.count(Blog.id))
             total_blogs = (await self.session.exec(sttmt_total)).first()
             
             scheme = request.scope.get("scheme") 
@@ -99,7 +99,7 @@ class BlogService:
                     "page": page,
                     "per_page": per_page,
                     "total": len(blogs),
-                    "total_pages": (len(total_blogs) // per_page) + 1,
+                    "total_pages": (total_blogs // per_page) + 1 if total_blogs > 0 else 0,
                     "data": list_blogs
                 },
                 status_code=200
