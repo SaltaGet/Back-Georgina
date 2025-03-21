@@ -67,13 +67,13 @@ class ImageTool:
             elif file_extension == '.png':
                 cv2.imwrite(file_location, image_resized, [cv2.IMWRITE_PNG_COMPRESSION, 9])
 
-            while os.path.getsize(file_location) > 512 * 1024: 
-                if file_extension == '.jpg':
-                    quality = max(5, 85 - 5) 
-                    cv2.imwrite(file_location, image_resized, [cv2.IMWRITE_JPEG_QUALITY, quality])
-                elif file_extension == '.png':
-                    compression = max(3, 9 - 1)  
-                    cv2.imwrite(file_location, image_resized, [cv2.IMWRITE_PNG_COMPRESSION, compression])
+            # while os.path.getsize(file_location) > 512 * 1024: 
+            #     if file_extension == '.jpg':
+            #         quality = max(5, 85 - 5) 
+            #         cv2.imwrite(file_location, image_resized, [cv2.IMWRITE_JPEG_QUALITY, quality])
+            #     elif file_extension == '.png':
+            #         compression = max(3, 9 - 1)  
+            #         cv2.imwrite(file_location, image_resized, [cv2.IMWRITE_PNG_COMPRESSION, compression])
 
             logging.info("Imagen guardada")
             return filename
@@ -92,11 +92,14 @@ class ImageTool:
         return image
     
     async def delete_image(self, filename: str) -> None:
-        media_path = os.path.join(self.path_image, filename)
-        if os.path.exists(media_path):
-            os.remove(media_path)
-        else:
-            raise HTTPException(status_code=404, detail="Archivo no encontrado")
+        try:
+            media_path = os.path.join(self.path_image, filename)
+            if os.path.exists(media_path):
+                os.remove(media_path)
+            else:
+                logging.error(f"Error al eliminar imagen: {e}")
+        except Exception as e:
+            logging.error(f"Error al eliminar imagen: {e}")
         
     async def get_image(self, file_name: str):
         try:

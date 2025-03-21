@@ -21,11 +21,12 @@ async def create(
     title: str = Form(reqired= True, min_length=1, max_length=100, description='El titulo contener de 3 a 100 carácteres'),
     body: str = Form(reqired= True, min_length=1, description='El cuerpo no puede estar vacio'),
     categories: CategoryBlog = Form(...),
+    galery: bool = Form(...),
     image: UploadFile = File(...),
     user: User = Depends(auth.get_current_user),
     session: AsyncSession = Depends(db.get_session),
 ):
-    blog: BlogCreate = BlogCreate(title= title, body= body, categories= categories, user_id= user.id)
+    blog: BlogCreate = BlogCreate(title= title, body= body, categories= categories, galery=galery, user_id= user.id)
     return await BlogService(session).create(blog, image)
 
 ############################### GET ###############################

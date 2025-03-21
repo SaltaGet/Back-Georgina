@@ -7,6 +7,7 @@ class BlogCreate(BaseModel):
     title: str
     body: str
     categories: CategoryBlog
+    galery: bool
     user_id: str
 
     @field_validator('title')
