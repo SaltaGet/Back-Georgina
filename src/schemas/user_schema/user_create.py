@@ -1,4 +1,3 @@
-from datetime import date
 import re
 import bcrypt
 from pydantic import BaseModel, field_validator

@@ -1,5 +1,4 @@
-from datetime import datetime, timezone
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator
 from src.models.blog_model import CategoryBlog
 
 

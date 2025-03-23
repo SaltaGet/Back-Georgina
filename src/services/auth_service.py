@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta, timezone
 import logging
 from fastapi import Depends, HTTPException, status
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -23,7 +22,6 @@ class AuthService:
 
     async def create_token(self, user: User, hs: int = 2):
         logging.info("Creando token")
-        expire = datetime.now(timezone.utc) + timedelta(hours=hs)
         data = {
             'user_id': user.id,
             'username': user.username,
