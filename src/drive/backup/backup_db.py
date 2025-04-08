@@ -17,7 +17,7 @@ async def drive_backup_db():
 
     drive_service = build('drive', 'v3', credentials=credentials)
 
-    file_metadata = {'name': f'convivir-{date.today().isoformat()}.db', 'parents': [config('ID_FOLDER')]}
+    file_metadata = {'name': f'convivir-{date.today().isoformat()}.db', 'parents': [config('ID_DB_BACKUP')]}
     media = MediaFileUpload(r'./convivir.db', mimetype='application/octet-stream')
 
     file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()

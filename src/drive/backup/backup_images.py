@@ -14,7 +14,7 @@ async def drive_backup_images():
 
         drive_service = build('drive', 'v3', credentials=credentials)
 
-        folder_id = config('ID_FOLDER_IMAGES')
+        folder_id = config('ID_IMAGES_BACKUP')
 
         query = f"'{folder_id}' in parents and (mimeType='image/jpeg' or mimeType='image/png')"
         results = drive_service.files().list(q=query, fields="files(id, name)").execute()
@@ -53,7 +53,7 @@ async def drive_backup_images():
                 else:
                     raise ValueError("Formato de imagen no soportado.")
 
-                file_metadata = {'name': elem, 'parents': [config('ID_FOLDER_IMAGES')]}
+                file_metadata = {'name': elem, 'parents': [folder_id]}
                 media = MediaFileUpload(os.path.join(folder_path, elem), mimetype=mime_type)
 
                 file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
